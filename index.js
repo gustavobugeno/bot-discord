@@ -219,7 +219,10 @@ client.on('messageCreate', async message => {
 // ============================================
 // ANOTARSE SOLO CON EL NOMBRE DEL ROL
 // ============================================
-if (contenido.startsWith('!')) {
+if (
+    contenido.startsWith('!') &&
+    !contenido.startsWith('!panel') // <-- FIX IMPORTANTE
+) {
 
     const comando = contenido.replace('!', '').trim();
 
