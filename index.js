@@ -308,6 +308,7 @@ async function intentarAnotar(cupos, actualizarPanel, panelChannelId, panelMessa
 }
 
 
+
     if (await intentarAnotar(cuposZVZ, actualizarPanelZVZ, panelZVZChannelId, panelZVZMessageId)) return;
     if (await intentarAnotar(cuposAVA, actualizarPanelAVA, panelAVAChannelId, panelAVAMessageId)) return;
     if (await intentarAnotar(cuposGRUPAL, actualizarPanelGRUPAL, panelGRUPALChannelId, panelGRUPALMessageId)) return;
