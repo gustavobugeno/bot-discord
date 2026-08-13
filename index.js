@@ -216,89 +216,99 @@ client.on('messageCreate', async message => {
     return;
 }
 
-    // ============================================
-    // ANOTARSE EN PANEL ZVZ
-    // ============================================
-    if (contenido.startsWith('!zvz-')) {
-        const rol = contenido.replace('!zvz-', '');
+// ============================================
+// ANOTARSE SOLO CON EL NOMBRE DEL ROL
+// ============================================
+if (contenido.startsWith('!')) {
 
-        if (!cuposZVZ.hasOwnProperty(rol)) return;
+    const comando = contenido.replace('!', '').trim();
 
+    // ============================
+    // SALIR DEL PANEL
+    // ============================
+    if (comando === "salir") {
         const nombre = `${message.member.displayName} (${message.guild.name})`;
 
-        if (Object.values(cuposZVZ).includes(nombre)) return;
+        // ZVZ
+        for (let r in cuposZVZ) {
+            if (cuposZVZ[r] === nombre) {
+                cuposZVZ[r] = "Vacante";
+                await actualizarPanelZVZ();
+                await message.react('❌');
+                return message.delete().catch(() => {});
+            }
+        }
 
-        if (cuposZVZ[rol] !== "Vacante") return;
+        // AVA
+        for (let r in cuposAVA) {
+            if (cuposAVA[r] === nombre) {
+                cuposAVA[r] = "Vacante";
+                await actualizarPanelAVA();
+                await message.react('❌');
+                return message.delete().catch(() => {});
+            }
+        }
 
-        cuposZVZ[rol] = nombre;
+        // GRUPAL
+        for (let r in cuposGRUPAL) {
+            if (cuposGRUPAL[r] === nombre) {
+                cuposGRUPAL[r] = "Vacante";
+                await actualizarPanelGRUPAL();
+                await message.react('❌');
+                return message.delete().catch(() => {});
+            }
+        }
 
-        await actualizarPanelZVZ();
-        await message.react('✅');
-        return message.delete().catch(() => {});
+        // MELEE
+        for (let r in cuposZVZMELEE) {
+            if (cuposZVZMELEE[r] === nombre) {
+                cuposZVZMELEE[r] = "Vacante";
+                await actualizarPanelZVZMELEE();
+                await message.react('❌');
+                return message.delete().catch(() => {});
+            }
+        }
+
+        await message.reply("No estabas anotado en ningún panel.");
+        return;
     }
 
-    // ============================================
-    // ANOTARSE EN PANEL AVA
-    // ============================================
-    if (contenido.startsWith('!ava-')) {
-        const rol = contenido.replace('!ava-', '');
+    // ============================
+    // ANOTARSE EN UN ROL
+    // ============================
+    const rol = comando;
+    const nombre = `${message.member.displayName} (${message.guild.name})`;
 
-        if (!cuposAVA.hasOwnProperty(rol)) return;
+    // Función para procesar anotación
+    async function intentarAnotar(cupos, actualizarPanel) {
+        if (!cupos.hasOwnProperty(rol)) return false;
 
-        const nombre = `${message.member.displayName} (${message.guild.name})`;
+        if (Object.values(cupos).includes(nombre)) {
+            await message.reply("Ya estás anotado en este panel.");
+            return true;
+        }
 
-        if (Object.values(cuposAVA).includes(nombre)) return;
+        if (cupos[rol] !== "Vacante") {
+            await message.reply("Ese rol ya está ocupado.");
+            return true;
+        }
 
-        if (cuposAVA[rol] !== "Vacante") return;
-
-        cuposAVA[rol] = nombre;
-
-        await actualizarPanelAVA();
+        cupos[rol] = nombre;
+        await actualizarPanel();
         await message.react('✅');
-        return message.delete().catch(() => {});
+        await message.delete().catch(() => {});
+        return true;
     }
 
-    // ============================================
-    // ANOTARSE EN PANEL GRUPAL
-    // ============================================
-    if (contenido.startsWith('!gr-')) {
-        const rol = contenido.replace('!gr-', '');
+    // Intentar en cada panel
+    if (await intentarAnotar(cuposZVZ, actualizarPanelZVZ)) return;
+    if (await intentarAnotar(cuposAVA, actualizarPanelAVA)) return;
+    if (await intentarAnotar(cuposGRUPAL, actualizarPanelGRUPAL)) return;
+    if (await intentarAnotar(cuposZVZMELEE, actualizarPanelZVZMELEE)) return;
 
-        if (!cuposGRUPAL.hasOwnProperty(rol)) return;
-
-        const nombre = `${message.member.displayName} (${message.guild.name})`;
-
-        if (Object.values(cuposGRUPAL).includes(nombre)) return;
-
-        if (cuposGRUPAL[rol] !== "Vacante") return;
-
-        cuposGRUPAL[rol] = nombre;
-
-        await actualizarPanelGRUPAL();
-        await message.react('✅');
-        return message.delete().catch(() => {});
-    }
-    // ============================================
-    // ANOTARSE EN PANEL ZVZ MELEE
-    // ============================================
-    if (contenido.startsWith('!mele-')) {
-        const rol = contenido.replace('!mele-', '');
-
-        if (!cuposZVZMELEE.hasOwnProperty(rol)) return;
-
-        const nombre = `${message.member.displayName} (${message.guild.name})`;
-
-        if (Object.values(cuposZVZMELEE).includes(nombre)) return;
-
-        if (cuposZVZMELEE[rol] !== "Vacante") return;
-
-        cuposZVZMELEE[rol] = nombre;
-
-        await actualizarPanelZVZMELEE();
-        await message.react('✅');
-        return message.delete().catch(() => {});
+    // Si no existe en ningún panel
+    await message.reply("Ese rol no existe en ningún panel.");
 }
-
 });
 
 // ===============================
@@ -469,4 +479,4 @@ ${n++}. 🟦 **Stoper:** > ${f('stoper')}
 }
 
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.BOT_TOKEN);
