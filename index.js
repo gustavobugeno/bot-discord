@@ -315,11 +315,14 @@ if (contenido.startsWith('!')) {
 // FUNCIONES PANEL ZVZ
 // ===============================
 async function actualizarPanelZVZ() {
+    if (!panelZVZChannelId || !panelZVZMessageId) return; // FIX
+
     const channel = await client.channels.fetch(panelZVZChannelId);
     const msg = await channel.messages.fetch(panelZVZMessageId);
     const textoAviso = "@everyone **Panel ZVZ — Anótense** 🔥";
     await msg.edit(`${textoAviso}\n\n${generarPanelZVZ()}`);
 }
+
 
 function generarPanelZVZ() {
     const f = p => cuposZVZ[p] === "Vacante" ? "*Vacante*" : `**${cuposZVZ[p]}**`;
@@ -365,11 +368,14 @@ ${n++}. 🟨 **Damnation:** > ${f('damnation')}
 // FUNCIONES PANEL AVA
 // ===============================
 async function actualizarPanelAVA() {
+    if (!panelAVAChannelId || !panelAVAMessageId) return; // FIX
+
     const channel = await client.channels.fetch(panelAVAChannelId);
     const msg = await channel.messages.fetch(panelAVAMessageId);
     const textoAviso = "@everyone **Panel AVA — Anótense** ⚔️🔥";
     await msg.edit(`${textoAviso}\n\n${generarPanelAVA()}`);
 }
+
 
 function generarPanelAVA() {
     const f = p => cuposAVA[p] === "Vacante" ? "*Vacante*" : `**${cuposAVA[p]}**`;
@@ -399,11 +405,14 @@ ${n++}. 🚑 **SC:** > ${f('sc')}
 // FUNCIONES PANEL GRUPAL
 // ===============================
 async function actualizarPanelGRUPAL() {
+    if (!panelGRUPALChannelId || !panelGRUPALMessageId) return; // FIX
+
     const channel = await client.channels.fetch(panelGRUPALChannelId);
     const msg = await channel.messages.fetch(panelGRUPALMessageId);
     const textoAviso = "@everyone **Panel GRUPAL — Anótense** ⚔️🔥";
     await msg.edit(`${textoAviso}\n\n${generarPanelGRUPAL()}`);
 }
+
 
 function generarPanelGRUPAL() {
     const f = p => cuposGRUPAL[p] === "Vacante" ? "*Vacante*" : `**${cuposGRUPAL[p]}**`;
@@ -427,17 +436,19 @@ ${n++}. 🟥 **DPS 1:** > ${f('dps1')}
 // FUNCIONES PANEL ZVZ-MELEE
 // ===============================
 async function actualizarPanelZVZMELEE() {
+    if (!panelZVZMELEEChannelId || !panelZVZMELEEMessageId) return; // FIX
+
     try {
         const channel = await client.channels.fetch(panelZVZMELEEChannelId);
         const msg = await channel.messages.fetch(panelZVZMELEEMessageId);
 
         const textoAviso = "@everyone **Panel ZVZ MELEE — Anótense** ⚔️🔥";
         await msg.edit(`${textoAviso}\n\n${generarPanelZVZMELEE()}`);
-
     } catch (err) {
         console.log("⚠️ No se pudo actualizar el panel ZVZ MELEE.");
     }
 }
+
 function generarPanelZVZMELEE() {
     const f = p => cuposZVZMELEE[p] === "Vacante" ? "*Vacante*" : `**${cuposZVZMELEE[p]}**`;
     let n = 1;
