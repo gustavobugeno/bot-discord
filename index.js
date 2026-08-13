@@ -282,32 +282,36 @@ if (
     const rol = comando;
     const nombre = `${message.member.displayName} (${message.guild.name})`;
 
-    // Función para procesar anotación
-    async function intentarAnotar(cupos, actualizarPanel) {
-        if (!cupos.hasOwnProperty(rol)) return false;
+async function intentarAnotar(cupos, actualizarPanel, panelChannelId, panelMessageId) {
+    if (!cupos.hasOwnProperty(rol)) return false;
 
-        if (Object.values(cupos).includes(nombre)) {
-            await message.reply("Ya estás anotado en este panel.");
-            return true;
-        }
-
-        if (cupos[rol] !== "Vacante") {
-            await message.reply("Ese rol ya está ocupado.");
-            return true;
-        }
-
-        cupos[rol] = nombre;
-        await actualizarPanel();
-        await message.react('✅');
-        await message.delete().catch(() => {});
+    if (!panelChannelId || !panelMessageId) {
+        await message.reply("No hay ningún panel activo para este tipo.");
         return true;
     }
 
-    // Intentar en cada panel
-    if (await intentarAnotar(cuposZVZ, actualizarPanelZVZ)) return;
-    if (await intentarAnotar(cuposAVA, actualizarPanelAVA)) return;
-    if (await intentarAnotar(cuposGRUPAL, actualizarPanelGRUPAL)) return;
-    if (await intentarAnotar(cuposZVZMELEE, actualizarPanelZVZMELEE)) return;
+    if (Object.values(cupos).includes(nombre)) {
+        await message.reply("Ya estás anotado en este panel.");
+        return true;
+    }
+
+    if (cupos[rol] !== "Vacante") {
+        await message.reply("Ese rol ya está ocupado.");
+        return true;
+    }
+
+    cupos[rol] = nombre;
+    await actualizarPanel();
+    await message.react('✅');
+    await message.delete().catch(() => {});
+    return true;
+}
+
+
+    if (await intentarAnotar(cuposZVZ, actualizarPanelZVZ, panelZVZChannelId, panelZVZMessageId)) return;
+    if (await intentarAnotar(cuposAVA, actualizarPanelAVA, panelAVAChannelId, panelAVAMessageId)) return;
+    if (await intentarAnotar(cuposGRUPAL, actualizarPanelGRUPAL, panelGRUPALChannelId, panelGRUPALMessageId)) return;
+    if (await intentarAnotar(cuposZVZMELEE, actualizarPanelZVZMELEE, panelZVZMELEEChannelId, panelZVZMELEEMessageId)) return;
 
     // Si no existe en ningún panel
     await message.reply("Ese rol no existe en ningún panel.");
