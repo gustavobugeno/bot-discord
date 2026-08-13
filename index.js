@@ -371,15 +371,13 @@ ${n++}. 🟨 **Damnation:** > ${f('damnation')}
 // FUNCIONES PANEL AVA
 // ===============================
 async function actualizarPanelAVA() {
-    if (!panelAVAChannelId || !panelAVAMessageId) return; // FIX
+    if (!panelAVAChannelId || !panelAVAMessageId) return; // <-- AQUÍ VA EL FIX
 
     const channel = await client.channels.fetch(panelAVAChannelId);
     const msg = await channel.messages.fetch(panelAVAMessageId);
     const textoAviso = "@everyone **Panel AVA — Anótense** ⚔️🔥";
     await msg.edit(`${textoAviso}\n\n${generarPanelAVA()}`);
 }
-
-
 function generarPanelAVA() {
     const f = p => cuposAVA[p] === "Vacante" ? "*Vacante*" : `**${cuposAVA[p]}**`;
     let n = 1;
