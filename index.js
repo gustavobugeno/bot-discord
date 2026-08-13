@@ -487,7 +487,6 @@ ${n++}. ⚖️ **Equilibrio:** > ${f('equilibrio')}
 ${n++}. 🟦 **Stoper:** > ${f('stoper')}
 
 --------------------------------------------------
-💡 Usa comandos como \`!mele-caller\`, \`!mele-martillo\`, \`!mele-hachas1\`.  
 💡 Usa \`!salir\` para desanotarte.
 `;
 }
